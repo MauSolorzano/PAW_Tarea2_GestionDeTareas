@@ -91,5 +91,149 @@ namespace PAW_Tarea2_GestionDeTareas.Controllers
 
             return tareas;
         }
+
+        //Este método recive una Tarea enviada desde el cliente
+        //Se valida su contenido y la agrega a la lista de tareas
+        //almacenadas en la sesión del servidor.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult Crear(Tarea tarea)
+        {
+            //Se valida el modelo de la tarea recibida. Si no es válido, se devuelve un mensaje de error.
+            if (!ModelState.IsValid)
+            {
+                return Json(new
+                {
+                    ok = false,
+                    mensaje = "El título o la descripción no son válidos."
+                });
+            }
+            //Se obtiene la lista de tareas almacenadas en la sesión del servidor.
+            var tareas = ObtenerTareasSession();
+            //Se valida que el identificador de la tarea sea mayor a cero y que no exista otra tarea con el mismo identificador.
+            if (tarea.Id <= 0 || tareas.Exists(t => t.Id == tarea.Id))
+            {
+                return Json(new
+                {
+                    ok = false,
+                    mensaje = "El identificador de la tarea no es válido."
+                });
+            }
+            //Se establece la fecha de creación y actualización de la tarea como la fecha y hora actual.
+            tarea.FechaCreacion = DateTime.Now;
+            tarea.FechaActualizacion = tarea.FechaCreacion;
+            //Se agrega la tarea a la lista de tareas almacenadas en la sesión del servidor.
+            tareas.Add(tarea);
+            //Se devuelve una respuesta JSON indicando que la tarea fue creada exitosamente, junto con un mensaje y la tarea creada.
+            return Json(new
+            {
+                ok = true,
+                mensaje = "Tarea creada.",
+                tarea = tarea
+            });
+        }
+
+        //Este método recibe una tarea enviada desde el cliente, valida su contenido y
+        //actualiza la tarea correspondiente en la lista de tareas almacenadas en
+        //la sesión del servidor.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult Editar(Tarea tarea)
+        {
+            //Se valida el modelo de la tarea recibida. Si no es válido,
+            //se devuelve un mensaje de error.
+            if (!ModelState.IsValid)
+            {
+                return Json(new
+                {
+                    ok = false,
+                    mensaje = "El título o la descripción no son válidos."
+                });
+            }
+            //Se obtiene la lista de tareas almacenadas en la sesión del servidor.
+            var tareas = ObtenerTareasSession();
+            //Se busca la tarea correspondiente en la lista de tareas usando el identificador de la tarea recibida.
+            var existente = tareas.Find(t => t.Id == tarea.Id);
+            //Si no se encuentra la tarea correspondiente, se devuelve un mensaje de error.
+            if (existente == null)
+            {
+                return Json(new
+                {
+                    ok = false,
+                    mensaje = "No se encontró la tarea."
+                });
+            }
+            //Se actualizan los campos de la tarea existente con los valores de la tarea recibida.
+            existente.Titulo = tarea.Titulo;
+            existente.Descripcion = tarea.Descripcion;
+            existente.FechaActualizacion = DateTime.Now;
+            //Se devuelve una respuesta JSON indicando que la tarea fue actualizada exitosamente, junto con un mensaje y la tarea actualizada.
+            return Json(new
+            {
+                ok = true,
+                mensaje = "Tarea actualizada.",
+                tarea = existente
+            });
+        }
+        //Este método recibe un identificador de tarea enviado desde el cliente,
+        //busca la tarea correspondiente en la lista de tareas almacenadas en
+        //la sesión del servidor y cambia su estado.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult CambiarEstado(int id)
+        {
+            //Se obtiene la lista de tareas almacenadas en la sesión del servidor.
+            var tareas = ObtenerTareasSession();
+            //Se busca la tarea correspondiente en la lista de tareas usando el identificador recibido.
+            var tarea = tareas.Find(t => t.Id == id);
+            //Si no se encuentra la tarea correspondiente, se devuelve un mensaje de error.
+            if (tarea == null)
+            {
+                return Json(new
+                {
+                    ok = false,
+                    mensaje = "No se encontró la tarea."
+                });
+            }
+            //Se cambia el estado de la tarea  y se actualiza la fecha de actualización.
+            tarea.Estado = !tarea.Estado;
+            tarea.FechaActualizacion = DateTime.Now;
+            //Se devuelve una respuesta JSON indicando que el estado de la tarea fue actualizado exitosamente, junto con un mensaje y la tarea actualizada.
+            return Json(new
+            {
+                ok = true,
+                mensaje = "Estado actualizado.",
+                tarea = tarea
+            });
+        }
+        //Este método recibe un identificador de tarea enviado desde el cliente,
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult Eliminar(int id)
+        {
+            //Se obtiene la lista de tareas almacenadas en la sesión del servidor.
+            var tareas = ObtenerTareasSession();
+            //Se busca la tarea correspondiente en la lista de tareas usando el identificador recibido.
+            var tarea = tareas.Find(t => t.Id == id);
+            //Si no se encuentra la tarea correspondiente, se devuelve un mensaje de error.
+            if (tarea == null)
+            {
+                return Json(new
+                {
+                    ok = false,
+                    mensaje = "No se encontró la tarea."
+                });
+            }
+            //Se elimina la tarea de la lista de tareas almacenadas en la sesión del servidor.
+            tareas.Remove(tarea);
+            //Se devuelve una respuesta JSON indicando que la tarea fue eliminada exitosamente,
+            //junto con un mensaje y el identificador de la tarea eliminada.
+            return Json(new
+            {
+                ok = true,
+                mensaje = "Tarea eliminada.",
+                id = id
+            });
+        }
     }
 }
