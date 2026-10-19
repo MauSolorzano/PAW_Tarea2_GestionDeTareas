@@ -1,33 +1,107 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿
+@{
+    ViewBag.Title = "Inicio";
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
+<style>
+    .inicio-container {
+        min-height: 75vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 15px;
+        background: linear-gradient(135deg, #f4f7fb, #e8eef8);
+        border-radius: 18px;
+    }
 
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
-    </div>
+    .tareas-card {
+        width: 100%;
+        max-width: 620px;
+        padding: 50px 40px;
+        text-align: center;
+        background-color: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 15px 45px rgba(30, 58, 95, 0.12);
+        border: 1px solid #e6ebf2;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .tareas-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 22px 55px rgba(30, 58, 95, 0.18);
+        }
+
+    .tareas-icono {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e8efff;
+        color: #3159c9;
+        border-radius: 25px;
+        font-size: 48px;
+    }
+
+    .tareas-card h1 {
+        margin-bottom: 18px;
+        color: #1e293b;
+        font-size: 36px;
+        font-weight: 700;
+    }
+
+
+    .btn-tareas {
+        display: inline-block;
+        padding: 15px 32px;
+        color: #ffffff !important;
+        background: #3159c9;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none !important;
+        transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+        .btn-tareas:hover {
+            background: #2445a5;
+            transform: translateY(-2px);
+        }
+
+
+    @@media (max-width: 576px) {
+        .tareas-card {
+            padding: 35px 22px;
+        }
+
+            .tareas-card h1 {
+                font-size: 29px;
+            }
+
+        .tareas-icono {
+            width: 80px;
+            height: 80px;
+            font-size: 38px;
+        }
+    }
+</style>
+
+<main class="inicio-container">
+    <section class="tareas-card" aria-labelledby="tituloTareas">
+
+        <div class="tareas-icono" aria-hidden="true">
+            &#9745;
+        </div>
+
+        <h1 id="tituloTareas">Gestión de Tareas</h1>
+
+
+        <a href="@Url.Action("Index", "Tarea")" class="btn-tareas">
+            Ir a mis tareas &rarr;
+        </a>
+
+
+    </section>
 </main>
