@@ -33,7 +33,9 @@
         filtro: "Todas",
         idEditando: null
     };
-
+    function formatearFecha(fecha) {
+        return fecha ? new Date(fecha).toLocaleString("es-CR") : "No disponible";
+    }
 
     //Funcion para obtener el siguiente ID disponible para una nueva tarea
     function nuevoId() {
@@ -178,6 +180,14 @@
             $("<p>")
                 .addClass("list-group-item-text")
                 .text(tarea.Descripcion || "Sin descripción")
+                .appendTo($elemento);
+
+            $("<p>")
+                .text("Creada: " + formatearFecha(tarea.FechaCreacion))
+                .appendTo($elemento);
+
+            $("<p>")
+                .text("Actualizada: " + formatearFecha(tarea.FechaActualizacion))
                 .appendTo($elemento);
 
             var $botones = $("<div>")
